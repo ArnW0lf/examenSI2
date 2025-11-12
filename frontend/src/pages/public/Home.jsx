@@ -27,17 +27,20 @@ const products = [
 export default function Home() {
 
   const [products, setProducts] = useState([]);
-  
+
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("Todas");
 
   useEffect(() => {
-  axios.get("http://localhost:8000/api/products/products/")
-    .then((response) => {
-      console.log("Productos:", response.data);
-      setProducts(response.data); // Aquí sí es un array
-    })
-    .catch((error) => console.error(error));
+    axios.get("http://localhost:8000/api/products/products/")
+      .then((response) => {
+        console.log("Productos:", response.data);
+        // La API de Django devuelve un objeto con la clave "results" que contiene el array
+        // Nos aseguramos de que sea un array antes de asignarlo
+        const productsArray = Array.isArray(response.data.results) ? response.data.results : [];
+        setProducts(productsArray);
+      })
+      .catch((error) => console.error(error));
   }, []);
 
   // Traer categorías
@@ -93,11 +96,11 @@ export default function Home() {
 
       {/* Catálogo de productos */}
       <div className="mt-8">
-        
+
         <ProductGrid products={filteredProducts} />
 
 
-       
+
       </div>
 
       {/* Botón flotante de búsqueda por voz */}
@@ -109,7 +112,7 @@ export default function Home() {
         <Mic className="w-6 h-6 text-white" />
       </button>
 
-      
+
     </CustomerLayout>
   );
 }

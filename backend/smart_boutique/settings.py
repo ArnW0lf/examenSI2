@@ -97,10 +97,16 @@ WSGI_APPLICATION = "smart_boutique.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {}
-DATABASES['default'] = dj_database_url.config(
-    default=os.environ.get('DATABASE_URL'), conn_max_age=600
-)
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'boutiquedb',  # 👈 El nombre de tu base de datos
+        'USER': 'postgres',            # 👈 Tu usuario de PostgreSQL
+        'PASSWORD': '123456789',     # 👈 Tu contraseña
+        'HOST': 'localhost',           # O 127.0.0.1
+        'PORT': '5432',                # El puerto por defecto de Postgres
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
