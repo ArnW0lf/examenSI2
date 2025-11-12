@@ -1,0 +1,16 @@
+id,name,slug,description,parent_id,is_active
+1,Camisas,camisas,Categoría de camisas,,True
+2,Pantalones,pantalones,Categoría de pantalones,,True
+3,Vestidos,vestidos,Categoría de vestidos,,True
+4,Calzados,calzados,Categoría de calzados,,True
+5,Accesorios,accesorios,Categoría de accesorios,,True
+6,Abrigos,abrigos,Categoría de abrigos,,True
+7,Blusas,blusas,Categoría de blusas,,True
+8,Faldas,faldas,Categoría de faldas,,True
+9,Jeans,jeans,Categoría de jeans,,True
+10,Shorts,shorts,Categoría de shorts,,True
+11,Ropa Deportiva,ropa-deportiva,Categoría de ropa deportiva,,True
+12,Trajes,trajes,Categoría de trajes,,True
+13,Sudaderas,sudaderas,Categoría de sudaderas,,True
+14,Bolsos,bolsos,Categoría de bolsos,,True
+15,Sombreros,sombreros,Categoría de sombreros,,True
