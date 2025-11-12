@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,13 +21,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-0*f=na+7n16#nx$7_$xg4i=f_n0_wrbt#5t1bs$)8s)bl5q8^&"
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY", "django-insecure-0*f=na+7n16#nx$7_$xg4i=f_n0_wrbt#5t1bs$)8s)bl5q8^&")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = []
-
+# Render te dará el nombre del host, y también puedes añadir tu dominio personalizado.
+ALLOWED_HOSTS = os.environ.get(
+    'ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
 # Application definition
 
@@ -39,9 +42,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     # Librerías externas
-    'rest_framework', #para construir APIs
-    'corsheaders',     #para conect el backend con el frontend
-    'rest_framework_simplejwt', # para autenticación con JWT
+    'rest_framework',  # para construir APIs
+    'corsheaders',  # para conect el backend con el frontend
+    'rest_framework_simplejwt',  # para autenticación con JWT
 
     # Tus apps
     'apps.users',
@@ -55,21 +58,21 @@ INSTALLED_APPS = [
     'apps.reviews',
     'apps.notifications',
     'apps.payments',
-    
+
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',#añadido para cors
     "django.middleware.security.SecurityMiddleware",
+    # Justo después de SecurityMiddleware
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
+    'corsheaders.middleware.CorsMiddleware',  # añadido para cors
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
-#CORS_ALLOW_ALL_ORIGINS = True  # Permitir que el frontend acceda (en desarrollo)
 
 ROOT_URLCONF = "smart_boutique.urls"
 
@@ -94,17 +97,10 @@ WSGI_APPLICATION = "smart_boutique.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smart_boutique_db',
-        'USER': 'postgres',
-        'PASSWORD': '141101',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(
+    default=os.environ.get('DATABASE_URL'), conn_max_age=600
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -141,6 +137,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Configuración de Whitenoise
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -154,10 +154,11 @@ REST_FRAMEWORK = {
 }
 
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    #"https://smartboutique.com",  # cuando tengas tu dominio en producción
-]
+# Las URLs del frontend (local para pruebas y la de producción en Render)
+CORS_ALLOWED_ORIGINS = os.environ.get(
+    'CORS_ALLOWED_ORIGINS', 'http://localhost:5173,http://127.0.0.1:5173').split(',')
+
+# Si tu frontend necesita enviar credenciales (cookies, etc.)
+# CORS_ALLOW_CREDENTIALS = True
 
 AUTH_USER_MODEL = 'users.User'
