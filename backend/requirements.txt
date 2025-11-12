@@ -1,11 +1,10 @@
-# requirements.txt (Limpio)
-Django==5.2
-gunicorn==23.0.0
-djangorestframework==3.16.0
-djangorestframework_simplejwt==5.5.0
-django-cors-headers==4.7.0
-dj-database-url==2.2.0  # Asegúrate de tener esta
-psycopg2-binary==2.9.10 # Para PostgreSQL
-whitenoise==6.9.0
-python-dotenv==1.1.1
-# ...añade cualquier otra librería que SÍ uses en Django
+Django
+gunicorn
+djangorestframework
+djangorestframework_simplejwt
+django-cors-headers
+dj-database-url
+psycopg2-binary
+whitenoise
+python-dotenv
+pandas==2.2.2
